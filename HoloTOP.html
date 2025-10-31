@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HoloTOP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+			font-family: 'Poppins', sans-serif;
+			background-image: url("https://koscollectibles.ca/cdn/shop/files/QuintetSpectrumBoosterBox_b0dd38c1-40ac-443b-8b3f-3120399e410c_1200x.png?v=1760737345");
+			background-size: cover;
+			background-repeat: no-repeat;
+			background-position: center center;
+			background-attachment: fixed;
+			min-height: 100vh;
+			padding: 20px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .header h1 {
+            color: #fff;
+            font-size: 3rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.3);
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #d0d8e6;
+            font-size: 1.1rem;
+            font-weight: 300;
+        }
+
+        .podium {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        @media (min-width: 768px) {
+            .podium {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .card:nth-child(1) {
+                order: 2;
+                transform: translateY(-20px);
+            }
+            
+            .card:nth-child(2) {
+                order: 1;
+            }
+            
+            .card:nth-child(3) {
+                order: 3;
+            }
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: slideIn 0.6s ease-out backwards;
+        }
+
+        .card:nth-child(1) {
+            animation-delay: 0.2s;
+        }
+
+        .card:nth-child(2) {
+            animation-delay: 0s;
+        }
+
+        .card:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.3);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 8px;
+        }
+
+        .card.gold::before {
+            background: linear-gradient(90deg, #FFD700, #FFA500);
+        }
+
+        .card.silver::before {
+            background: linear-gradient(90deg, #C0C0C0, #808080);
+        }
+
+        .card.bronze::before {
+            background: linear-gradient(90deg, #CD7F32, #8B4513);
+        }
+
+        .medal {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #fff;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+
+        .gold .medal {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+        }
+
+        .silver .medal {
+            background: linear-gradient(135deg, #E8E8E8, #A0A0A0);
+        }
+
+        .bronze .medal {
+            background: linear-gradient(135deg, #CD7F32, #8B4513);
+        }
+
+        .avatar-container {
+            width: 220px;
+            height: 220px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 4px solid #f0f0f0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+            position: relative;
+            cursor: pointer;
+        }
+
+        .avatar-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .avatar-container:hover::after {
+            content: '📷';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+
+        .player-name {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 8px;
+            transition: background 0.3s ease;
+        }
+
+        .player-name:hover {
+            background: #f0f0f0;
+        }
+
+        .deck-label {
+            font-size: 0.85rem;
+            color: #7f8c8d;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+        .deck-container {
+            margin-top: 10px;
+        }
+
+        .deck-name {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #34495e;
+            cursor: pointer;
+            padding: 8px 15px;
+            border-radius: 8px;
+            transition: background 0.3s ease;
+        }
+
+        .deck-name:hover {
+            background: #f0f0f0;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            text-align: center;
+            transition: border 0.3s ease;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .edit-mode {
+            background: #fff;
+        }
+
+        /* Modal de selección */
+        .selection-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .selection-modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .modal-header h2 {
+            color: #2c3e50;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.8rem;
+            color: #7f8c8d;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .close-modal:hover {
+            background: #ecf0f1;
+            color: #2c3e50;
+        }
+
+        /* Selector de edición/categoría */
+        .edition-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .edition-option, .deck-option {
+            cursor: pointer;
+            text-align: center;
+            padding: 20px 15px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            background: #f8f9fa;
+        }
+
+        .edition-option:hover, .deck-option:hover {
+            background: #e8f4f8;
+            border-color: #3498db;
+            transform: translateY(-5px);
+        }
+
+        .edition-option h3, .deck-option h3 {
+            font-size: 1.1rem;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .edition-option p, .deck-option p {
+            font-size: 0.85rem;
+            color: #7f8c8d;
+        }
+
+        /* Grid de avatares */
+        .avatar-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .avatar-option {
+            cursor: pointer;
+            text-align: center;
+            padding: 15px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .avatar-option:hover {
+            background: #f8f9fa;
+            border-color: #3498db;
+            transform: translateY(-5px);
+        }
+
+        .avatar-option img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .avatar-option p {
+            font-size: 0.85rem;
+            color: #7f8c8d;
+            font-weight: 500;
+        }
+
+        /* Grid de decks */
+        .deck-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 15px;
+        }
+
+        .deck-option img {
+            width: 100%;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .back-button {
+            background: #95a5a6;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .back-button:hover {
+            background: #7f8c8d;
+            transform: translateY(-2px);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 767px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .header p {
+                font-size: 1rem;
+            }
+
+            .card {
+                padding: 25px 15px;
+            }
+
+            .medal {
+                width: 60px;
+                height: 60px;
+                font-size: 2rem;
+            }
+
+            .avatar-container {
+                width: 100px;
+                height: 100px;
+            }
+
+            .player-name {
+                font-size: 1.3rem;
+            }
+
+            .edition-grid, .deck-grid {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏆 Top 3 Hololive Store Tournament - Top8 Store</h1>
+        </div>
+
+        <div class="podium">
+            <div class="card gold">
+                <div class="medal">1°</div>
+                <div class="avatar-container" onclick="showEditionSelector('img1')">
+                    <img id="img1" src="https://ui-avatars.com/api/?name=Campeón&size=200&background=FFD700&color=fff&bold=true" alt="Campeón">
+                </div>
+                <div class="player-name" onclick="editName(this)">Campeón</div>
+                <div class="deck-label">Deck utilizado</div>
+                <div class="deck-container" onclick="showDeckEditionSelector('deck1')">
+                    <div class="deck-name" id="deck1-name">Dragon Blanco</div>
+                </div>
+            </div>
+
+            <div class="card silver">
+                <div class="medal">2°</div>
+                <div class="avatar-container" onclick="showEditionSelector('img2')">
+                    <img id="img2" src="https://ui-avatars.com/api/?name=Subcampeón&size=200&background=C0C0C0&color=fff&bold=true" alt="Subcampeón">
+                </div>
+                <div class="player-name" onclick="editName(this)">Subcampeón</div>
+                <div class="deck-label">Deck utilizado</div>
+                <div class="deck-container" onclick="showDeckEditionSelector('deck2')">
+                    <div class="deck-name" id="deck2-name">Control Azul</div>
+                </div>
+            </div>
+
+            <div class="card bronze">
+                <div class="medal">3°</div>
+                <div class="avatar-container" onclick="showEditionSelector('img3')">
+                    <img id="img3" src="https://ui-avatars.com/api/?name=Tercer+Lugar&size=200&background=CD7F32&color=fff&bold=true" alt="Tercer Lugar">
+                </div>
+                <div class="player-name" onclick="editName(this)">Tercer Lugar</div>
+                <div class="deck-label">Deck utilizado</div>
+                <div class="deck-container" onclick="showDeckEditionSelector('deck3')">
+                    <div class="deck-name" id="deck3-name">Aggro Rojo</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const editionCatalog = {
+            "Rojo": [
+                {
+                    name: "Kiara Ramp",
+                    url: "https://i.imgur.com/7DddWQp.png",
+                    deck: "Kiara Ramp"
+                },
+                {
+                    name: "KiaraIroha",
+                    url: "https://i.imgur.com/rmxZGdn.png",
+                    deck: "KiaraIroha"
+                },
+                {
+                    name: "Polkiara",
+                    url: "https://i.imgur.com/dbnwBQ9.png",
+                    deck: "Polkiara"
+                },
+                {
+                    name: "KiaraZeta",
+                    url: "https://i.imgur.com/fYxgTfp.png",
+                    deck: "KiaraZeta"
+                },
+                {
+                    name: "Lui",
+                    url: "https://i.imgur.com/CIqsN09.png",
+                    deck: "Lui"
+                },
+                {
+                    name: "Polka 12 Fans",
+                    url: "https://i.imgur.com/OPnNu3y.png",
+                    deck: "Polka 12 Fans"
+                },
+                {
+                    name: "Mono Marine",
+                    url: "https://i.imgur.com/v9AeARI.png",
+                    deck: "Mono Marine"
+                },
+                {
+                    name: "MarineChloe",
+                    url: "https://i.imgur.com/FglW8ok.png",
+                    deck: "MarineChloe"
+                },
+                {
+                    name: "MarineIroha",
+                    url: "https://i.imgur.com/EseuZJp.png",
+                    deck: "MarineIroha"
+                },
+                {
+                    name: "Mono Ayame",
+                    url: "https://i.imgur.com/xgbV4BT.png",
+                    deck: "Mono Ayame"
+                },
+                {
+                    name: "AyaMio",
+                    url: "https://i.imgur.com/x6eKCr0.png",
+                    deck: "AyaMio"
+                },
+                {
+                    name: "AyaPeko",
+                    url: "https://i.imgur.com/KKgm9l3.png",
+                    deck: "AyaPeko"
+                }
+            ],
+            "Azul": [
+                {
+                    name: "SuiMoona",
+                    url: "https://i.imgur.com/r4z6EYH.png",
+                    deck: "SuiMoona"
+                },
+                {
+                    name: "SuiChloe",
+                    url: "https://i.imgur.com/tUTRHGc.png",
+                    deck: "SuiChloe"
+                },
+                {
+                    name: "SuIroha",
+                    url: "https://i.imgur.com/Cgtr93s.png",
+                    deck: "SuIroha"
+                },
+                {
+                    name: "Kobo",
+                    url: "https://i.imgur.com/XapzolQ.png",
+                    deck: "Kobo"
+                },
+                {
+                    name: "MoonaZeta",
+                    url: "https://i.imgur.com/0O3KFLK.png",
+                    deck: "MoonaZeta"
+                },
+                {
+                    name: "MoonaIofi",
+                    url: "https://i.imgur.com/uriFZKC.png",
+                    deck: "MoonaIofi"
+                },
+                {
+                    name: "Mono Chloe",
+                    url: "https://i.imgur.com/NV63LfA.png",
+                    deck: "Mono Chloe"
+                },
+                {
+                    name: "ChloeLui",
+                    url: "https://i.imgur.com/Kll2xHT.png",
+                    deck: "ChloeLui"
+                },
+                {
+                    name: "Okayu",
+                    url: "https://i.imgur.com/Jk5u68t.png",
+                    deck: "Okayu"
+                }
+            ],
+            "Verde": [
+                {
+                    name: "Azki",
+                    url: "https://i.imgur.com/FUNd158.png",
+                    deck: "Azki"
+                },
+                {
+                    name: "Aki",
+                    url: "https://i.imgur.com/3DZYXmM.png",
+                    deck: "Aki"
+                },
+                {
+                    name: "Mono Pekora",
+                    url: "https://i.imgur.com/nmqazTq.png",
+                    deck: "Mono Pekora"
+                },
+                {
+                    name: "PekoMarine",
+                    url: "https://i.imgur.com/xZXIHkm.png",
+                    deck: "PekoMarine"
+                },
+                {
+                    name: "PekoIroha",
+                    url: "https://i.imgur.com/emJckIg.png",
+                    deck: "PekoIroha"
+                },
+                {
+                    name: "PekoMoona",
+                    url: "https://i.imgur.com/4J9F9Ra.png",
+                    deck: "PekoMoona"
+                },
+                {
+                    name: "ReineIofi",
+                    url: "https://i.imgur.com/IsSyC0r.png",
+                    deck: "ReineIofi"
+                },
+                {
+                    name: "ReineZeta",
+                    url: "https://i.imgur.com/oDQY6RH.png",
+                    deck: "ReineZeta"
+                },
+                {
+                    name: "ReineMarine",
+                    url: "https://i.imgur.com/bjIRtMP.png",
+                    deck: "ReineMarine"
+                },
+                {
+                    name: "Mio",
+                    url: "https://i.imgur.com/yAW93w4.png",
+                    deck: "Mio"
+                }
+            ],
+            "Blanco": [
+                {
+                    name: "Sora",
+                    url: "https://i.imgur.com/hlP3tZH.png",
+                    deck: "Sora"
+                },
+                {
+                    name: "Mono Kanata",
+                    url: "https://ui-avatars.com/api/?name=PS&size=200&background=f8f9fa&color=555&bold=true",
+                    deck: "Mono Kanata"
+                },
+                {
+                    name: "Promise Core",
+                    url: "https://ui-avatars.com/api/?name=CL&size=200&background=f1c40f&color=fff&bold=true",
+                    deck: "Promise Core"
+                },
+                {
+                    name: "Mono Fubuki",
+                    url: "https://ui-avatars.com/api/?name=PS&size=200&background=f8f9fa&color=555&bold=true",
+                    deck: "Mono Fubuki"
+                },
+                {
+                    name: "FubuMio",
+                    url: "https://ui-avatars.com/api/?name=PS&size=200&background=f8f9fa&color=555&bold=true",
+                    deck: "FubuMio"
+                },
+                {
+                    name: "NoelMarine",
+                    url: "https://ui-avatars.com/api/?name=PS&size=200&background=f8f9fa&color=555&bold=true",
+                    deck: "NoelMarine"
+                },
+                {
+                    name: "NoePeko",
+                    url: "https://ui-avatars.com/api/?name=PS&size=200&background=f8f9fa&color=555&bold=true",
+                    deck: "NoePeko"
+                },
+                {
+                    name: "Hajime",
+                    url: "https://ui-avatars.com/api/?name=PS&size=200&background=f8f9fa&color=555&bold=true",
+                    deck: "Hajime"
+                },
+                {
+                    name: "Luna",
+                    url: "https://ui-avatars.com/api/?name=PS&size=200&background=f8f9fa&color=555&bold=true",
+                    deck: "Luna"
+                },
+                {
+                    name: "Koyori",
+                    url: "https://ui-avatars.com/api/?name=PS&size=200&background=f8f9fa&color=555&bold=true",
+                    deck: "Koyori"
+                }
+            ],
+            "Púrpura": [
+                {
+                    name: "Ollie",
+                    url: "https://ui-avatars.com/api/?name=HO&size=200&background=8e44ad&color=fff&bold=true",
+                    deck: "Ollie"
+                },
+                {
+                    name: "Calli Ramp",
+                    url: "https://ui-avatars.com/api/?name=SA&size=200&background=9b59b6&color=fff&bold=true",
+                    deck: "Calli Ramp"
+                },
+                {
+                    name: "TakaMori",
+                    url: "https://ui-avatars.com/api/?name=NI&size=200&background=5b2c6f&color=fff&bold=true",
+                    deck: "TakaMori"
+                },
+                {
+                    name: "Mono Shion",
+                    url: "https://ui-avatars.com/api/?name=NI&size=200&background=5b2c6f&color=fff&bold=true",
+                    deck: "Mono Shion"
+                },
+                {
+                    name: "ShionChloe",
+                    url: "https://ui-avatars.com/api/?name=NI&size=200&background=5b2c6f&color=fff&bold=true",
+                    deck: "ShionChloe"
+                },
+                {
+                    name: "Ina",
+                    url: "https://ui-avatars.com/api/?name=NI&size=200&background=5b2c6f&color=fff&bold=true",
+                    deck: "Ina"
+                },
+                {
+                    name: "Mono Choco",
+                    url: "https://ui-avatars.com/api/?name=NI&size=200&background=5b2c6f&color=fff&bold=true",
+                    deck: "Mono Choco"
+                },
+                {
+                    name: "Choco Ramp",
+                    url: "https://ui-avatars.com/api/?name=NI&size=200&background=5b2c6f&color=fff&bold=true",
+                    deck: "Choco Ramp"
+                },
+                {
+                    name: "Towa Core",
+                    url: "https://ui-avatars.com/api/?name=NI&size=200&background=5b2c6f&color=fff&bold=true",
+                    deck: "Towa Core"
+                },
+                {
+                    name: "Towa Ramp",
+                    url: "https://ui-avatars.com/api/?name=NI&size=200&background=5b2c6f&color=fff&bold=true",
+                    deck: "Towa Ramp"
+                },
+                {
+                    name: "Mono Laplus",
+                    url: "https://ui-avatars.com/api/?name=NI&size=200&background=5b2c6f&color=fff&bold=true",
+                    deck: "Mono Laplus"
+                },
+                {
+                    name: "HoloX",
+                    url: "https://ui-avatars.com/api/?name=NI&size=200&background=5b2c6f&color=fff&bold=true",
+                    deck: "HoloX"
+                },
+                {
+                    name: "Nerissa",
+                    url: "https://ui-avatars.com/api/?name=NI&size=200&background=5b2c6f&color=fff&bold=true",
+                    deck: "Nerissa"
+                }
+            ]
+        };
+
+        // Pico pal que lee
+        const deckEditionCatalog = {
+            "Rojo": [
+                {
+                    name: "Aggro Rojo",
+                    image: "https://ui-avatars.com/api/?name=AR&size=200&background=e74c3c&color=fff&bold=true"
+                },
+                {
+                    name: "Dragones Carmesí",
+                    image: "https://ui-avatars.com/api/?name=DC&size=200&background=c0392b&color=fff&bold=true"
+                },
+                {
+                    name: "Furia de Fuego",
+                    image: "https://ui-avatars.com/api/?name=FF&size=200&background=e67e22&color=fff&bold=true"
+                }
+            ],
+            "Azul": [
+                {
+                    name: "Control Azul",
+                    image: "https://ui-avatars.com/api/?name=CA&size=200&background=3498db&color=fff&bold=true"
+                },
+                {
+                    name: "Leviatán Profundo",
+                    image: "https://ui-avatars.com/api/?name=LP&size=200&background=2980b9&color=fff&bold=true"
+                },
+                {
+                    name: "Mareas Heladas",
+                    image: "https://ui-avatars.com/api/?name=MH&size=200&background=5dade2&color=fff&bold=true"
+                }
+            ],
+            "Verde": [
+                {
+                    name: "Rampa Verde",
+                    image: "https://ui-avatars.com/api/?name=RV&size=200&background=27ae60&color=fff&bold=true"
+                },
+                {
+                    name: "Bestias Salvajes",
+                    image: "https://ui-avatars.com/api/?name=BS&size=200&background=229954&color=fff&bold=true"
+                },
+                {
+                    name: "Furia Natural",
+                    image: "https://ui-avatars.com/api/?name=FN&size=200&background=52be80&color=fff&bold=true"
+                }
+            ],
+            "Blanco": [
+                {
+                    name: "Weenie Blanco",
+                    image: "https://ui-avatars.com/api/?name=WB&size=200&background=ecf0f1&color=333&bold=true"
+                },
+                {
+                    name: "Ángeles Divinos",
+                    image: "https://ui-avatars.com/api/?name=AD&size=200&background=f8f9fa&color=555&bold=true"
+                },
+                {
+                    name: "Luz Celestial",
+                    image: "https://ui-avatars.com/api/?name=LC&size=200&background=f1c40f&color=fff&bold=true"
+                }
+            ],
+            "Purpura": [
+                {
+                    name: "Control Negro",
+                    image: "https://ui-avatars.com/api/?name=CN&size=200&background=8e44ad&color=fff&bold=true"
+                },
+                {
+                    name: "Sombras Arcanas",
+                    image: "https://ui-avatars.com/api/?name=SA&size=200&background=9b59b6&color=fff&bold=true"
+                },
+                {
+                    name: "Nigromancia",
+                    image: "https://ui-avatars.com/api/?name=NI&size=200&background=5b2c6f&color=fff&bold=true"
+                }
+            ]
+        };
+
+        let currentImgId = null;
+        let currentDeckId = null;
+
+        // Pal que llego aca tambien
+        function showEditionSelector(imgId) {
+            currentImgId = imgId;
+            const modal = document.createElement('div');
+            modal.className = 'selection-modal';
+            modal.innerHTML = `
+                <div class="selection-modal-content">
+                    <div class="modal-header">
+                        <h2>Selecciona un Color</h2>
+                        <button class="close-modal" onclick="this.closest('.selection-modal').remove()">X</button>
+                    </div>
+                    <div class="edition-grid">
+                        ${Object.keys(editionCatalog).map(color => `
+                            <div class="edition-option" onclick="showAvatarsFromEdition('${color}')">
+                                <h3>${color}</h3>
+                                <p>${editionCatalog[color].length} decks</p>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        function showAvatarsFromEdition(color) {
+            const modal = document.querySelector('.selection-modal');
+            modal.innerHTML = `
+                <div class="selection-modal-content">
+                    <div class="modal-header">
+                        <h2>Decks - ${color}</h2>
+                        <button class="close-modal" onclick="this.closest('.selection-modal').remove()">X</button>
+                    </div>
+                    <button class="back-button" onclick="showEditionSelector('${currentImgId}'); this.closest('.selection-modal').remove()">Volver a Colores</button>
+                    <div class="avatar-grid">
+                        ${editionCatalog[color].map(avatar => `
+                            <div class="avatar-option" onclick="selectAvatarWithDeck('${currentImgId}', '${avatar.url}', '${avatar.deck}')">
+                                <img src="${avatar.url}" alt="${avatar.name}">
+                                <p>${avatar.name}</p>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function selectAvatarWithDeck(imgId, url, deckName) {
+            document.getElementById(imgId).src = url;
+            const deckId = imgId.replace('img', 'deck');
+            document.getElementById(deckId + '-name').textContent = deckName;
+            document.querySelector('.selection-modal').remove();
+        }
+
+        function showDeckEditionSelector(deckId) {
+            currentDeckId = deckId;
+            const modal = document.createElement('div');
+            modal.className = 'selection-modal';
+            modal.innerHTML = `
+                <div class="selection-modal-content">
+                    <div class="modal-header">
+                        <h2>Selecciona un Color de Deck</h2>
+                        <button class="close-modal" onclick="this.closest('.selection-modal').remove()">X</button>
+                    </div>
+                    <div class="edition-grid">
+                        ${Object.keys(deckEditionCatalog).map(color => `
+                            <div class="edition-option" onclick="showDecksFromEdition('${color}')">
+                                <h3>${color}</h3>
+                                <p>${deckEditionCatalog[color].length} decks</p>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        function showDecksFromEdition(color) {
+            const modal = document.querySelector('.selection-modal');
+            modal.innerHTML = `
+                <div class="selection-modal-content">
+                    <div class="modal-header">
+                        <h2>Decks ${color}</h2>
+                        <button class="close-modal" onclick="this.closest('.selection-modal').remove()">X</button>
+                    </div>
+                    <button class="back-button" onclick="showDeckEditionSelector('${currentDeckId}'); this.closest('.selection-modal').remove()">Volver a Colores</button>
+                    <div class="deck-grid">
+                        ${deckEditionCatalog[color].map(deck => `
+                            <div class="deck-option" onclick="selectDeck('${currentDeckId}', '${deck.name}')">
+                                <img src="${deck.image}" alt="${deck.name}">
+                                <h3>${deck.name}</h3>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function selectDeck(deckId, name) {
+            document.getElementById(deckId + '-name').textContent = name;
+            document.querySelector('.selection-modal').remove();
+        }
+
+        function editName(element) {
+            const currentText = element.textContent;
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.value = currentText;
+            input.className = 'edit-mode';
+            
+            input.onblur = function() {
+                element.textContent = this.value || currentText;
+                element.style.display = 'block';
+                this.remove();
+            };
+            
+            input.onkeypress = function(e) {
+                if (e.key === 'Enter') {
+                    this.blur();
+                }
+            };
+            
+            element.style.display = 'none';
+            element.parentNode.insertBefore(input, element);
+            input.focus();
+            input.select();
+        }
+    </script>
+</body>
+</html>
