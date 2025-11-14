@@ -454,6 +454,39 @@
             display: none;
         }
 
+        .capture-button {
+            width: 100%;
+            margin-top: 20px;
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .capture-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .capture-button:active {
+            transform: translateY(0);
+        }
+
+        .capture-button span {
+            font-size: 1.3rem;
+        }
+
         /* ========== MODALES ========== */
         input[type="text"] {
             width: 100%;
@@ -768,8 +801,15 @@
             </div>
             <input type="file" id="photoUpload" accept="image/*" onchange="loadTournamentPhoto(this)">
         </div>
+
+        <button class="capture-button" onclick="captureAndDownload()">
+            <span>📸</span>
+            Descargar Imagen del Top 3
+        </button>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
     <script>
         const editionCatalog = {
             "Rojo": [
@@ -881,18 +921,14 @@
         }
 
         function selectAvatarWithDeck(imgId, url, deckName) {
-            // Cambiar avatar
             document.getElementById(imgId).src = url;
             
-            // Determinar si es desktop o mobile y actualizar el deck correspondiente
             if (imgId.includes('desktop')) {
                 const deckNum = imgId.match(/\d+/)[0];
                 document.getElementById(`deck${deckNum}-desktop-name`).textContent = deckName;
             } else if (imgId.includes('mobile')) {
                 const deckNum = imgId.match(/\d+/)[0];
                 document.getElementById(`deck${deckNum}-mobile-name`).textContent = deckName;
-                
-                // Actualizar el color de la barra según el deck
                 updateBarTheme(`bar${deckNum}`, deckName);
             }
             
@@ -978,6 +1014,36 @@
                 };
                 reader.readAsDataURL(input.files[0]);
             }
+        }
+
+        function captureAndDownload() {
+            const container = document.querySelector('.container-mobile');
+            const button = document.querySelector('.capture-button');
+            button.style.display = 'none';
+            
+            html2canvas(container, {
+                backgroundColor: '#1a1a2e',
+                scale: 2,
+                logging: false,
+                useCORS: true,
+                allowTaint: true
+            }).then(canvas => {
+                button.style.display = 'flex';
+                
+                canvas.toBlob(function(blob) {
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    const fecha = new Date().toISOString().slice(0,10);
+                    link.download = `Top3-Torneo-${fecha}.png`;
+                    link.href = url;
+                    link.click();
+                    URL.revokeObjectURL(url);
+                });
+            }).catch(error => {
+                button.style.display = 'flex';
+                console.error('Error al capturar:', error);
+                alert('Hubo un error al capturar la imagen. Intenta nuevamente.');
+            });
         }
 
         function editName(element) {
